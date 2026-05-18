@@ -20,6 +20,31 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 
+# ==========================================
+# 改造点 1：全局统一输出目录 (极其重要)
+# 这样就不需要在子目录里用 set_target_properties 挨个设置了
+# ==========================================
+set(MY_BIN_OUT_DIR "${CMAKE_BINARY_DIR}/bin")
+set(MY_LIB_OUT_DIR "${CMAKE_BINARY_DIR}/lib")
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${MY_BIN_OUT_DIR}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${MY_LIB_OUT_DIR}")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${MY_LIB_OUT_DIR}")
+
+# 针对 MSVC 等多配置生成器 (Debug/Release)，防止它在 bin 目录下再建 Debug 文件夹
+foreach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
+    string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${MY_BIN_OUT_DIR}")
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${MY_LIB_OUT_DIR}")
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${MY_LIB_OUT_DIR}")
+endforeach()
+
+# ==========================================
+# 改造点 2：明确构建动态库
+# ==========================================
+set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
+
+
 ## 检查工具
 option(WITH_SANITIZE "Build with sanitizer enabled" OFF)
 set(SANITIZE_FLAGS "" CACHE STRING "Sets flags for sanitizer compilation flags used in Debug builds")

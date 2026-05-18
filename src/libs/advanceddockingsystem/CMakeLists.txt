@@ -1,54 +1,83 @@
-﻿cmake_minimum_required(VERSION 3.16)
-add_subdirectory(src)
-# cmake_minimum_required(VERSION 3.16)
-# set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# if (POLICY CMP0091)
-#   cmake_policy(SET CMP0091 NEW)
-# endif (POLICY CMP0091)
+﻿set(ads_SRCS
+    ads_globals.cpp
+    DockAreaTabBar.cpp
+    DockAreaTitleBar.cpp
+    DockAreaWidget.cpp
+    DockContainerWidget.cpp
+    DockManager.cpp
+    DockOverlay.cpp
+    DockSplitter.cpp
+    DockWidget.cpp
+    DockWidgetTab.cpp
+    DockingStateReader.cpp
+    DockFocusController.cpp
+    ElidingLabel.cpp
+    FloatingDockContainer.cpp
+    FloatingDragPreview.cpp
+    IconProvider.cpp
+    DockComponentsFactory.cpp
+    AutoHideSideBar.cpp
+    AutoHideTab.cpp
+    AutoHideDockContainer.cpp
+    PushButton.cpp
+    ResizeHandle.cpp
+    ads.qrc
+)
 
-# # By default, the version information is extracted from the git index. However,
-# # we can override this behavior by explicitly setting ADS_VERSION and
-# # skipping the git checks. This is useful for cases where this project is being
-# # used independently of its original git repo (e.g. vendored in another project)
+set(ads_HEADERS
+    ads_globals.h
+    DockAreaTabBar.h
+    DockAreaTitleBar.h
+    DockAreaTitleBar_p.h
+    DockAreaWidget.h
+    DockContainerWidget.h
+    DockManager.h
+    DockOverlay.h
+    DockSplitter.h
+    DockWidget.h
+    DockWidgetTab.h
+    DockingStateReader.h
+    DockFocusController.h
+    ElidingLabel.h
+    FloatingDockContainer.h
+    FloatingDragPreview.h
+    IconProvider.h
+    DockComponentsFactory.h
+    AutoHideSideBar.h
+    AutoHideTab.h
+    AutoHideDockContainer.h
+    PushButton.h
+    ResizeHandle.h
+)
 
-# set(ADS_VERSION "4.5.0")
-# set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
-# if(NOT ADS_VERSION)
-#     set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
-#     include(GetGitRevisionDescription)
-#     git_describe(GitTagVersion --tags)
-#     string(REGEX REPLACE "^([0-9]+)\\..*" "\\1" VERSION_MAJOR "${GitTagVersion}")
-#     string(REGEX REPLACE "^[0-9]+\\.([0-9]+).*" "\\1" VERSION_MINOR "${GitTagVersion}")
-#     string(REGEX REPLACE "^[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_PATCH "${GitTagVersion}")
-#     set(VERSION_SHORT "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
-#     set(VERSION_SONAME "${VERSION_MAJOR}")
-# else()
-#     string(REGEX MATCHALL "[\.]" VERSION_DOT_MATCHES ${ADS_VERSION})
-#     list(LENGTH VERSION_DOT_MATCHES VERSION_DOT_COUNT)
-#     if(VERSION_DOT_COUNT EQUAL 2)
-#         set(VERSION_SHORT ${ADS_VERSION})
-#         string(REGEX REPLACE "^([0-9]+)\\..*" "\\1" VERSION_SONAME "${ADS_VERSION}")
-#     else()
-#         message(FATAL_ERROR "ADS_VERSION must be in major.minor.patch format, e.g. 3.8.1. Got ${ADS_VERSION}")
-#     endif()
-# endif()
+if (UNIX AND NOT APPLE)
+    list(APPEND ads_SRCS linux/FloatingWidgetTitleBar.cpp)
+    list(APPEND ads_HEADERS linux/FloatingWidgetTitleBar.h)
+endif()
+
+# 使用你 IDE 的宏来构建库
+add_qtc_library(AdvancedDockingSystem
+  PUBLIC_DEPENDS Qt6::Core Qt6::Gui Qt6::Widgets
+  SOURCES
+    ${ads_SRCS}
+    ${ads_HEADERS}
+)
+
+# 强制取消 IDE 框架强加的禁用 Java 风格迭代器的宏
+if (MSVC)
+    target_compile_options(AdvancedDockingSystem PRIVATE /UQT_NO_JAVA_STYLE_ITERATORS)
+else()
+    target_compile_options(AdvancedDockingSystem PRIVATE -UQT_NO_JAVA_STYLE_ITERATORS)
+endif()
 
 
-# project(QtADS LANGUAGES CXX VERSION ${VERSION_SHORT})
+# 导出动态库符号 (对应 QtADS 原本的 ADS_SHARED_EXPORT)
+extend_qtc_target(AdvancedDockingSystem DEFINES ADS_SHARED_EXPORT)
 
-# option(BUILD_STATIC "Build the static library" OFF)
-# option(BUILD_EXAMPLES "Build the examples" OFF)
-
-# if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
-#     set(ads_PlatformDir "x86")
-# else()
-#     set(ads_PlatformDir "x64")
-# endif()
-
-# add_subdirectory(src)
-
-# if(BUILD_EXAMPLES)
-#     add_subdirectory(examples)
-#     add_subdirectory(demo)
-# endif()
-
+if(UNIX AND NOT APPLE)
+    extend_qtc_target(AdvancedDockingSystem PUBLIC_DEPENDS xcb)
+    # 如果是 Qt6，可能还需要 GuiPrivate
+    if (TARGET Qt6::GuiPrivate)
+        extend_qtc_target(AdvancedDockingSystem DEPENDS Qt6::GuiPrivate)
+    endif()
+endif()

@@ -1,4 +1,4 @@
-# =====================================================================
+﻿# =====================================================================
 # IDE 版本信息
 # =====================================================================
 set(IDE_VERSION "1.0.0")                              # 你的 IDE 内部版本号
@@ -11,7 +11,7 @@ set(IDE_COPYRIGHT_YEAR "2026")                        # 版权年份
 # =====================================================================
 # 这两个变量决定了 QSettings 的存储位置 (Windows 下的注册表路径，或 AppData 目录)
 set(IDE_SETTINGSVARIANT "MyCompany")                  # 对应 QSettings 的 Organization (组织名)
-set(IDE_CASED_ID "MyIDE")                          # 对应 QSettings 的 Application (应用名)
+set(IDE_CASED_ID "MyIDEBase")                          # 对应 QSettings 的 Application (应用名)
 
 set(IDE_DISPLAY_NAME "MyIDEBase")                    # 你的 IDE 名字 (显示在主窗口标题栏)
 set(IDE_ID "myplcide")                                # 纯小写 ID (决定了插件存放的文件夹名，如 lib/myplcide/plugins)
