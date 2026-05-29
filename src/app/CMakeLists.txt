@@ -8,3 +8,7 @@ add_qtc_executable(MyIDE
   SOURCES
     main.cpp
 )
+
+install(TARGETS MyIDE
+    RUNTIME DESTINATION bin
+)

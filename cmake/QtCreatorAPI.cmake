@@ -239,6 +239,7 @@ function(add_qtc_plugin target_name)
     VISIBILITY_INLINES_HIDDEN ON
     LIBRARY_OUTPUT_DIRECTORY "${_output_binary_dir}/${plugin_dir}"
     RUNTIME_OUTPUT_DIRECTORY "${_output_binary_dir}/${plugin_dir}"
+    ARCHIVE_OUTPUT_DIRECTORY "${_output_binary_dir}/${IDE_LIBRARY_PATH}"
     OUTPUT_NAME "${name}"
     QTC_PLUGIN_CLASS_NAME ${_arg_PLUGIN_CLASS}
     ${_arg_PROPERTIES}

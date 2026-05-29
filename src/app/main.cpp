@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
     PluginManager pm;
     PluginManager::setPluginIID("org.qt-project.Qt.QtCreatorPlugin");
     QStringList pluginPaths;
-    pluginPaths << qApp->applicationDirPath() + "/../lib/myplcide/plugins";
     pluginPaths << qApp->applicationDirPath() + "/plugins";
     PluginManager::setPluginPaths(pluginPaths);
 

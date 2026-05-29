@@ -11,3 +11,8 @@ add_qtc_plugin(TestPlugin
     testplugin.cpp testplugin.h
     testplugin.json.in
 )
+
+install(TARGETS TestPlugin
+    RUNTIME DESTINATION bin/plugins
+    LIBRARY DESTINATION bin/plugins
+)

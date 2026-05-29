@@ -44,3 +44,10 @@ cmake --build build/Desktop_Qt_6_8_3_MSVC2022_64bit-Release
 cmake --install build/Desktop_Qt_6_8_3_MSVC2022_64bit-Release --prefix "D:/MyIDE_SDK_R" --config Release
 cmake --install build/Desktop_Qt_6_8_3_MSVC2022_64bit-Debug --prefix "D:/MyIDE_SDK_D" --config Debug
 ```
+
+
+## 脚本 
+.\scripts\install.ps1                          # Build + install Both
+.\scripts\install.ps1 -Configuration Debug     # Debug only
+.\scripts\install.ps1 -Configuration Release -SkipBuild  # Install only, no rebuild
+.\scripts\install.ps1 -Clean                   # Wipe destination before install
