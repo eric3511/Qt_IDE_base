@@ -14,7 +14,6 @@ target_include_directories(app_version
 
 add_subdirectory(libs)
 add_subdirectory(plugins)
-add_subdirectory(app)
 #add_subdirectory(tools)
 
 
